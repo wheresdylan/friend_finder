@@ -1,7 +1,6 @@
-
-
-
 <!DOCTYPE html>
+
+
 <html lang="en">
 
 <head>
@@ -28,11 +27,12 @@
                 <input type="text" class="form-control" id="image" placeholder="Link To Photo Image">
             </div>
 
-            <h3>Question One</h3>
+            <h3>Question OneOne</h3>
             <div class="form-group">
                 <div class="form-group">
                     <label for="Select1">Example select</label>
                     <select class="form-control" id="Select1" style="width:180px">
+                        <option value="" selected disabled>Select Option</option>
                         <option>1(strongly disagree)</option>
                         <option>2</option>
                         <option>3</option>
@@ -46,6 +46,7 @@
                 <div class="form-group">
                     <label for="Select2">Example select</label>
                     <select class="form-control" id="Select2" style="width: 180px">
+                        <option value="" selected disabled>Select Option</option>
                         <option>1(strongly disagree)</option>
                         <option>2</option>
                         <option>3</option>
@@ -60,6 +61,7 @@
                 <div class="form-group">
                     <label for="Select3">Example select</label>
                     <select class="form-control" id="Select3" style="width: 180px">
+                        <option value="" selected disabled>Select Option</option>
                         <option>1(strongly disagree)</option>
                         <option>2</option>
                         <option>3</option>
@@ -74,6 +76,7 @@
                 <div class="form-group">
                     <label for="Select4">Example select</label>
                     <select class="form-control" id="Select4" style="width: 180px">
+                        <option value="" selected disabled>Select Option</option>
                         <option>1(strongly disagree)</option>
                         <option>2</option>
                         <option>3</option>
@@ -88,6 +91,7 @@
                 <div class="form-group">
                     <label for="Select5">Example select</label>
                     <select class="form-control" id="Select5" style="width: 180px">
+                        <option value="" selected disabled>Select Option</option>
                         <option>1(strongly disagree)</option>
                         <option>2</option>
                         <option>3</option>
@@ -102,6 +106,7 @@
                 <div class="form-group">
                     <label for="Select6">Example select</label>
                     <select class="form-control" id="Select6" style="width: 180px">
+                        <option value="" selected disabled>Select Option</option>
                         <option>1(strongly disagree)</option>
                         <option>2</option>
                         <option>3</option>
@@ -116,6 +121,7 @@
                 <div class="form-group">
                     <label for="Select7">Example select</label>
                     <select class="form-control" id="Select7" style="width: 180px">
+                        <option value="" selected disabled>Select Option</option>
                         <option>1(strongly disagree)</option>
                         <option>2</option>
                         <option>3</option>
@@ -130,6 +136,7 @@
                 <div class="form-group">
                     <label for="Select8">Example select</label>
                     <select class="form-control" id="Select8" style="width: 180px">
+                        <option value="" selected disabled>Select Option</option>
                         <option>1(strongly disagree)</option>
                         <option>2</option>
                         <option>3</option>
@@ -144,6 +151,7 @@
                 <div class="form-group">
                     <label for="Select9">Example select</label>
                     <select class="form-control" id="Select9" style="width: 180px">
+                        <option value="" selected disabled>Select Option</option>
                         <option>1(strongly disagree)</option>
                         <option>2</option>
                         <option>3</option>
@@ -158,6 +166,7 @@
                 <div class="form-group">
                     <label for="Select10">Example select</label>
                     <select class="form-control" id="Select10" style="width: 180px">
+                        <option value="" selected disabled>Select Option</option>
                         <option>1(strongly disagree)</option>
                         <option>2</option>
                         <option>3</option>
@@ -189,8 +198,16 @@
 
 <script type="text/javascript">
 
+    var totalDifference = 0;
+
     $(".submit").on("click", function (event) {
         event.preventDefault();
+
+        var number = 0;
+        var differenceArray = [];
+        var positionArray = [];
+
+        var totalDifference = 0;
 
         var newFriend = {
             name: $("#name").val().trim(),
@@ -212,12 +229,69 @@
         });
 
         $.get("/api/friends", function (req, res) {
-            console.log(req[0].scores);
+            for (var i = 0; i < req.length - 1; i++) {
+
+                var newName;
+
+                for (var r = 0; r < 10; r++) {
+
+                    // console.log(newFriend.scores[r]);
+                    // console.log(req[i].scores[r]);
+
+                    var newNumber = 0;
+
+
+                    newNumber = numberDifference(parseInt(newFriend.scores[r]), req[i].scores[r])
+                    // newFriend.scores[r] - req[i].scores[r];
+
+                    number += newNumber;
+
+                }
+
+
+
+                // console.log(number);
+
+                newName = req[i].name;
+                // console.log(newName);
+
+                differenceArray.push({ name: newName, score: number });
+                positionArray.push(number);
+
+                number = 0;
+
+
+                // console.log(newFriend.scores[i]);
+
+            }
+            // alert(differenceArray);
+
+
+
+            var index = 0;
+            var value = positionArray[0];
+            for (var i = 1; i < positionArray.length; i++) {
+                if (positionArray[i] < value) {
+                    value = positionArray[i];
+                    index = i;
+                }
+            }
+            
+            alert("You Matched With " + differenceArray[index].name)
         });
 
         $("#name").val("");
         $("#image").val("");
 
     });
+
+    function numberDifference(num1, num2) {
+        if (num1 > num2) {
+            return num1 - num2
+        }
+        else {
+            return num2 - num1
+        }
+    }
 
 </script>
